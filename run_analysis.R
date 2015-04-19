@@ -2,6 +2,7 @@
 # install/upload the required R library 
 library(plyr)
 library(dplyr)
+library(Rcpp)
 
 # Create a directory to store the data set; and download the file from the web
 if(!file.exists("./dataset")){
@@ -47,6 +48,15 @@ names(subjectData) <- "subject"
 
 # Combine all the data sets into one complete data set
 combinedData <- cbind(xData, yData, subjectData)
+
+# Appropriately labels the data set with descriptive variable names.
+names(combinedData) <- gsub("Acc", "Accelerator", names(combinedData))
+names(combinedData) <- gsub("Mag", "Magnitude", names(combinedData))
+names(combinedData) <- gsub("Gyro", "Gyroscope", names(combinedData))
+names(combinedData) <- gsub("^t", "time", names(combinedData))
+names(combinedData) <- gsub("^f", "frequency", names(combinedData))
+names(combinedData) <- gsub("BodyBody", "Body", names(combinedData))
+names(combinedData) <- gsub("[:()]", "", names(combinedData))
 
 # Creates a second, independent tidy data set with the average of each variable for each activity and each subject
 # 66 <- 68 columns but last two (activity & subject)
